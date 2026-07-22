@@ -23,10 +23,17 @@
         {{ $event->location }}
     </p>
 
-    <p>
-        Bannière :
-        {{ $event->banner }}
-    </p>
+    @if($event->banner)
+        <p>
+            Bannière :
+            <img
+                src="{{ asset('storage/'.$event->banner) }}"
+                alt="Bannière de {{ $event->title }}"
+                width="150">
+        </p>
+    @else
+        <p>Aucune bannière</p>
+    @endif
 
 
     <a href="{{ route('events.index') }}">

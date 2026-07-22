@@ -9,7 +9,7 @@
     <h1>Modifier {{ $event->title }}</h1>
 
 
-    <form action="{{ route('events.update', $event) }}" method="POST">
+    <form action="{{ route('events.update', $event) }}" method="POST" enctype="multipart/form-data">
         
         @csrf
         @method('PUT')
@@ -32,9 +32,14 @@
 
 
         <label>Bannière</label>
-        <input type="text" name="banner" value="{{ old('banner', $event->banner) }}">
+        <input type="file" name="banner" accept="image/*">
+        @if($event->banner)
+            <p>Bannière actuelle :</p>
 
-        <button type="submit">
+            <img src="{{ asset('storage/'.$event->banner) }}" width="150">
+        @endif
+
+        <button type="submit" class="btn btn-primary">
             Modifier
         </button>
 

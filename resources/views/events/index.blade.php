@@ -7,6 +7,21 @@
     <title>Évènements</title>
 </head>
 <body>
+
+    @if(session('success'))
+
+        <div style="
+            background:#d4edda;
+            color:#155724;
+            padding:15px;
+            margin-bottom:20px;
+            border:1px solid #c3e6cb;
+            border-radius:5px;
+        ">
+            {{ session('success') }}
+        </div>
+
+    @endif
     
     <h1>Liste des évènements</h1>
 
@@ -36,7 +51,16 @@
                     <td>{{ $event->description }}</td>
                     <td>{{ $event->date }}</td>
                     <td>{{ $event->location }}</td>
-                    <td>{{ $event->banner }}</td>
+                    <td>
+                        @if($event->banner)
+                            <img 
+                                src="{{ asset('storage/'.$event->banner) }}" 
+                                width="150"
+                                alt="Bannière {{ $event->title }}">
+                        @else
+                            Aucune image
+                        @endif
+                    </td>
                     <td>
 
                         <a href="{{ route('events.show', $event)}}">

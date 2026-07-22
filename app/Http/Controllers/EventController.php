@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Http\Requests\StoreEventRequest;
+use App\Http\Requests\UpdateEventRequest;
 use App\Services\EventService;
 
 
@@ -54,8 +55,11 @@ class EventController extends Controller
     public function store(StoreEventRequest $request)
     {
         // enregistrer un nouvel événement
+        
         $this->eventService->createEvent($request->validated());
-        return redirect()->route('events.index');
+        return redirect()
+            ->route('events.index')
+            ->with('success', 'Événement créé avec succès.');
         
     }
 
@@ -81,19 +85,13 @@ class EventController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Event $event)
+    public function update(UpdateEventRequest $request, Event $event)
     {
         // modifier un événement
-        $event->update([
-
-
-            'title' => $request->title,
-            'description' => $request->description,
-            'date' => $request->date,
-            'location' => $request->location,
-            'banner' => $request->banner,
-        ]);
-        return redirect()->route('events.index');
+        $this->eventService->updateEvent($event,$request->validated());
+        return redirect()
+            ->route('events.index')
+            ->with('success', 'Événement modifié avec succès.');
     }
 
     /**
@@ -101,9 +99,12 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
-        // supprimer un événement
-        $event->delete();
+        // supprimer un événement via le Service
+        $this->eventService->deleteEvent($event);
 
-        return redirect()->route('events.index');
+        // Rediriger vers la liste des événements
+        return redirect()
+            ->route('events.index')
+            ->with('success', 'Événement supprimé avec succès.');
     }
 }
