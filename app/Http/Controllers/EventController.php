@@ -4,20 +4,39 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
+use App\Http\Requests\StoreEventRequest;
+use App\Services\EventService;
+
+
 
 class EventController extends Controller
 {
     /**
      * Display a listing of the resource.
-     */
+    */
+
+    // propriété privée au controleur
+    protected EventService $eventService;
+
+    //constructeur du controlleur
+    public function __construct(EventService $eventService)
+    {
+        $this->eventService = $eventService;
+    }
+
+
     public function index()
     {
         // afficher la liste des événements
 
-        $events = Event::all();
 
+        // Récupérer les événements via le Service
+        $events = $this->eventService->getEvents();
+
+        // Envoyer les événements à la vue
         return view('events.index', compact('events'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -32,18 +51,10 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreEventRequest $request)
     {
         // enregistrer un nouvel événement
-        Event::create([
-            'title' => $request->title,
-        'description' => $request->description,
-        'date' => $request->date,
-        'location' => $request->location,
-        'banner' => $request->banner,
-
-        ]);
-        
+        $this->eventService->createEvent($request->validated());
         return redirect()->route('events.index');
         
     }
