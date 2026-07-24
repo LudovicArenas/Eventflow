@@ -1,51 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Modifier événement</title>
-</head>
+@extends('layouts.app')
 
-<body>
+@section('content')
 
-    <h1>Modifier {{ $event->title }}</h1>
+<div class="card">
 
+    <div class="card-header">
+        Modifier un évènement
+    </div>
 
-    <form action="{{ route('events.update', $event) }}" method="POST" enctype="multipart/form-data">
-        
-        @csrf
-        @method('PUT')
+    <div class="card-body">
 
+        <form
+            action="{{ route('events.update',$event) }}"
+            method="POST"
+            enctype="multipart/form-data">
 
-        <label>Titre</label>
-        <input type="text" name="title" value="{{ old('title', $event->title) }}">
+            @method('PUT')
 
+            @include('events.partials.form')
 
-        <label>Description</label>
-        <input type="text" name="description" value="{{ old('description', $event->description) }}">
+        </form>
 
+    </div>
 
-        <label>Date</label>
-        <input type="date" name="date" value="{{ old('date', $event->date) }}">
+</div>
 
-
-        <label>Localisation</label>
-        <input type="text" name="location" value="{{ old('location', $event->location) }}">
-
-
-        <label>Bannière</label>
-        <input type="file" name="banner" accept="image/*">
-        @if($event->banner)
-            <p>Bannière actuelle :</p>
-
-            <img src="{{ asset('storage/'.$event->banner) }}" width="150">
-        @endif
-
-        <button type="submit" class="btn btn-primary">
-            Modifier
-        </button>
-
-
-    </form>
-
-
-</body>
-</html>
+@endsection
